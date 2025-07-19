@@ -5,25 +5,14 @@ import pathlib
 from loguru import logger
 import yaml
 
-from zoo_argowf_runner.runner import ExecutionHandler, ZooArgoWorkflowsRunner
+from zoo_argowf_runner.runner import ZooArgoWorkflowsRunner
 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../zoo-runner-common')))
+from base_handler import ExecutionHandler
 
-try:
-    import zoo
-except ImportError:
+from zoostub import ZooStub
+zoo = ZooStub()
 
-    class ZooStub(object):
-        def __init__(self):
-            self.SERVICE_SUCCEEDED = 3
-            self.SERVICE_FAILED = 4
-
-        def update_status(self, conf, progress):
-            print(f"Status {progress}")
-
-        def _(self, message):
-            print(f"invoked _ with {message}")
-
-    zoo = ZooStub()
 
 
 class ArgoWFRunnerExecutionHandler(ExecutionHandler):
